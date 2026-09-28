@@ -8,7 +8,7 @@
 
 ## 부탁
 1. `dev-employment_manager` 브랜치의 `games/wh3/mods/employment_manager/pack/` 내용을 그대로 RPFM으로 `.pack` 빌드
-   - 파일 3개: `script/campaign/mod/employment_manager.lua`, `script/campaign/mod/employment_manager_pool_test.lua` (나머지는 빈 폴더)
+   - `tools/build_pack.py` (003) 로 빌드하면 된다. lua 2개 + DB 테이블 1개
    - pack 타입 Mod, 이름 `employment_manager.pack` → `data/` 에 넣고 런처에서 활성화
 2. 아무 세력 캠페인 로드 (새 게임이든 세이브든)
 3. **턴을 한 번 넘기기** (풀에 새 후보가 들어와야 추적됨)

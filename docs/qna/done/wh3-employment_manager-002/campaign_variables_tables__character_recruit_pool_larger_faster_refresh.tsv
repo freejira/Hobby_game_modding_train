@@ -1,0 +1,6 @@
+variable_key	value
+#campaign_variables_tables;0;db/campaign_variables_tables/!character_recruit_pool_larger_faster_refresh
+character_recruitment_max_rounds_in_pool	3.0
+character_recruitment_min_rounds_in_pool	2.0
+min_total_recruitment_pool_entries	3.0
+recruitment_pool_entries_per_category	3.0

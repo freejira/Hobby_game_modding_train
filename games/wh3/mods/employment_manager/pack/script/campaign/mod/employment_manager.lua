@@ -1,17 +1,20 @@
--- lord_hero_manager
--- 맵에서 선택한 자기 세력 군주/영웅에 버튼 두 개를 붙인다.
+-- employment_manager
+-- 맵에서 선택한 자기 세력 군주/영웅에 버튼을 붙인다.
 --   [영구 삭제]       군주·영웅. 불멸을 끄고 죽여서 고용창으로 돌아오지 않게 한다 (레벨 무관).
 --   [고용창으로 보내기] 영웅 전용. 불멸로 만든 뒤 죽여서 부상 상태로 만들고, 즉시 회복시켜 고용창으로 돌린다.
 --                     (군주는 바닐라 해산으로 이미 고용창에 돌아간다)
--- 두 버튼 모두 3초 안에 두 번 클릭해야 실행된다.
+--   [고용풀 리셋]     RESET_COST 골드를 내고 군주 고용풀의 일반 군주 후보를 전부 지운다.
+--                     (전설 군주·부상 중인 군주는 유지. 빈 자리는 바닐라가 다시 채운다)
+-- 모든 버튼은 3초 안에 두 번 클릭해야 실행된다.
 --
 -- 고용창(풀)을 직접 건드리는 API가 없으므로 풀에 있는 군주는 고용해서 맵에 꺼낸 뒤 삭제한다.
--- 디버그: DUMP_UI = true 로 두면 패널이 열릴 때마다 UI 트리를 lord_hero_manager_ui_dump.txt 에 기록한다.
+-- 디버그: DUMP_UI = true 로 두면 패널이 열릴 때마다 UI 트리를 employment_manager_ui_dump.txt 에 기록한다.
 
-local MOD = "lord_hero_manager"
-local EVENT_PREFIX = "lord_hero_manager|"
+local MOD = "employment_manager"
+local EVENT_PREFIX = "employment_manager|"
 local CONFIRM_SECONDS = 3
 local DUMP_UI = false
+local RESET_COST = 1000
 
 local selected_cqi = nil
 local armed = { id = nil, at = nil }
@@ -96,7 +99,55 @@ ACTIONS.recall = {
     end,
 }
 
-local ACTION_ORDER = { "recall", "remove" }
+-- 고용풀 후보 = 군대·위치가 없는 자기 세력 군주.
+-- 스크립트 문서에 풀 전용 API가 없어서 이렇게 추정한다 (인게임 검증 필요).
+local function pool_candidates(faction)
+    local result = {}
+    local list = faction:character_list()
+    for i = 0, list:num_items() - 1 do
+        local c = list:item_at(i)
+        if is_general(c)
+            and not c:has_military_force()
+            and not c:has_garrison_residence()
+            and not c:has_region()
+            and not c:is_at_sea()
+            and not c:is_faction_leader()
+            and not c:is_wounded()
+            and not c:character_details():is_unique() then
+            table.insert(result, c)
+        end
+    end
+    return result
+end
+
+ACTIONS.reset = {
+    button_id = MOD .. "_reset",
+    title = "고용풀 리셋 (" .. RESET_COST .. " 골드)",
+    help = "군주 고용창의 일반 군주 후보를 모두 지웁니다. 전설 군주와 부상 중인 군주는 남습니다.\n빈 자리는 게임이 새 후보로 채웁니다.",
+    applies = function(character) return is_general(character) end,
+    check = function(character)
+        if character:faction():treasury() < RESET_COST then
+            return "골드가 부족합니다 (" .. RESET_COST .. " 필요)."
+        end
+        if #pool_candidates(character:faction()) == 0 then
+            return "지울 후보가 없습니다."
+        end
+        return nil
+    end,
+    run = function(character)
+        local faction = character:faction()
+        local candidates = pool_candidates(faction)
+        cm:treasury_mod(faction:name(), -RESET_COST)
+        for _, c in ipairs(candidates) do
+            log("reset: removing " .. c:command_queue_index() .. " " .. c:get_forename() .. " " .. c:get_surname())
+            cm:suppress_immortality(c:family_member():command_queue_index(), true)
+            cm:kill_character(cm:char_lookup_str(c), false)
+        end
+        log("reset: removed " .. #candidates .. " candidates for " .. RESET_COST .. " gold")
+    end,
+}
+
+local ACTION_ORDER = { "recall", "remove", "reset" }
 
 local function reject_reason(action, character)
     if not is_local_character(character) then
@@ -136,7 +187,7 @@ local function get_button(action, index)
     button = UIComponent(root:CreateComponent(action.button_id, "ui/templates/square_medium_button"))
     local sw, sh = core:get_screen_resolution()
     local bw, bh = button:Dimensions()
-    button:MoveTo(math.floor(sw / 2 - bw / 2 + (index - 1.5) * (bw + 8)), sh - bh - 180)
+    button:MoveTo(math.floor(sw / 2 - bw / 2 + (index - 2) * (bw + 8)), sh - bh - 180)
     return button
 end
 

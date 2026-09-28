@@ -13,7 +13,7 @@
 local MOD = "employment_manager"
 local EVENT_PREFIX = "employment_manager|"
 local CONFIRM_SECONDS = 3
-local DUMP_UI = false
+local DUMP_UI = true  -- 테스트 기간 동안 켜 둠. 배포 전 false
 local SEVERANCE_PAY = 1000  -- 해고 퇴직금
 
 local selected_cqi = nil

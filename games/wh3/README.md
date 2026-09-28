@@ -28,6 +28,8 @@ pack/text/db/*.loc.tsv    # 번역된 loc TSV
 | 이름 | 설명 | 상태 |
 |---|---|---|
 
+| [lord_remover](mods/lord_remover) | 군주 영구 삭제 (레벨·불멸 무관) | 인게임 테스트 전 |
+
 ### translations
 | 이름 | 원본 모드 (워크샵 ID) | 기준 버전 | 상태 |
 |---|---|---|---|

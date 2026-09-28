@@ -7,6 +7,8 @@
 | 고용창으로 보내기 | 영웅 | 맵에서 빼서 고용창으로 복귀 (군주 해산과 같은 효과, 레벨·스킬 유지) |
 | 해고 (퇴직금 1000 골드) | 군주·영웅 | 퇴직금을 내고 영구 삭제. 레벨/불멸 무관, 고용창으로 안 돌아옴 |
 
+그리고 **고용풀 갱신 주기**를 바닐라 10~15턴 → **3~5턴**으로 줄인다 (후보가 풀에 머무는 기간).
+
 모든 버튼은 **3초 안에 두 번 클릭**해야 실행된다. 퇴직금은 lua의 `SEVERANCE_PAY` 로 바꿀 수 있다.
 
 - 게임 버전: WH3 (인게임 미검증)
@@ -25,6 +27,11 @@
 - 군대에 유닛이 남은 군주는 삭제 불가 (실수 방지)
 
 ## 원리
+- 갱신 주기: `db/campaign_variables_tables/!employment_manager` (TSV → 빌드 시 바이너리)
+  - `character_recruitment_min_rounds_in_pool` 10 → 3
+  - `character_recruitment_max_rounds_in_pool` 15 → 5
+  - More Characters in Recruit Pools & Fast Refresh (3285143427) 와 같은 키를 쓴다. 같이 쓰면 테이블 파일 이름 순으로
+    `!character_recruit...` 가 먼저라 그 모드 값(2~3턴)이 우선일 것으로 보임 (확인 필요)
 - 해고: `cm:treasury_mod(faction, -1000)` → `cm:suppress_immortality(fm_cqi, true)` → `cm:kill_character(lookup, 군주면 true)`
   - 골드 차감은 문서상 "양수여야 함"이라 음수 동작 확인 필요
 - 고용창으로 보내기: `cm:set_character_immortality(lookup, true)` → `cm:kill_character` 로 부상 상태 →
@@ -57,8 +64,10 @@
 - [ ] 고용창으로 보내기: 영웅 고용 목록에 나타나는지, 레벨/스킬/장비 유지되는지
 - [ ] 해고: 1000 골드가 빠지는지, 골드 부족하면 버튼이 비활성인지
 - [ ] 고용 → 해고 후 다음 턴에 고용풀이 보충되는지
+- [ ] 풀 후보가 3~5턴마다 바뀌는지
 
 ## 변경 이력
+- 0.6: 고용풀 갱신 주기 10~15턴 → 3~5턴 (campaign_variables)
 - 0.5 (테스트): 고용풀 후보 추적·삭제 테스트, UI 덤프 기본 켜짐
 - 0.4: 영구 삭제 → 해고 (퇴직금 1000 골드). 추정 방식이던 고용풀 리셋 제거
 - 0.3: Employment Manager 로 이름 변경. 고용풀 리셋 (1000 골드) 추가

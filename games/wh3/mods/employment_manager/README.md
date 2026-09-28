@@ -7,6 +7,8 @@
 | 고용창으로 보내기 | 영웅 | 맵에서 빼서 고용창으로 복귀 (군주 해산과 같은 효과, 레벨·스킬 유지) |
 | 해고 (퇴직금 1000 골드) | 군주·영웅 | 퇴직금을 내고 영구 삭제. 레벨/불멸 무관, 고용창으로 안 돌아옴 |
 
+그리고 **고용풀 갱신 주기**를 바닐라 10~15턴 → **3~5턴**으로 줄인다 (후보가 풀에 머무는 기간).
+
 모든 버튼은 **3초 안에 두 번 클릭**해야 실행된다. 퇴직금은 lua의 `SEVERANCE_PAY` 로 바꿀 수 있다.
 
 - 게임 버전: WH3 (인게임 미검증)
@@ -25,6 +27,11 @@
 - 군대에 유닛이 남은 군주는 삭제 불가 (실수 방지)
 
 ## 원리
+- 갱신 주기: `db/campaign_variables_tables/!employment_manager` (TSV → 빌드 시 바이너리)
+  - `character_recruitment_min_rounds_in_pool` 10 → 3
+  - `character_recruitment_max_rounds_in_pool` 15 → 5
+  - More Characters in Recruit Pools & Fast Refresh (3285143427) 와 같은 키를 쓴다. 같이 쓰면 테이블 파일 이름 순으로
+    `!character_recruit...` 가 먼저라 그 모드 값(2~3턴)이 우선일 것으로 보임 (확인 필요)
 - 해고: `cm:treasury_mod(faction, -1000)` → `cm:suppress_immortality(fm_cqi, true)` → `cm:kill_character(lookup, 군주면 true)`
   - 골드 차감은 문서상 "양수여야 함"이라 음수 동작 확인 필요
 - 고용창으로 보내기: `cm:set_character_immortality(lookup, true)` → `cm:kill_character` 로 부상 상태 →
@@ -32,10 +39,23 @@
   - 부작용: 한 번 보낸 영웅은 **불멸**이 된다 (이후 전투에서 죽어도 부상 후 복귀). 필요하면 해고로 정리.
 - 클릭은 `UITriggerScriptEvent` 를 거쳐 처리 (멀티플레이 동기화)
 
-## TODO: 고용창에서 바로 삭제
-1. lua 파일의 `DUMP_UI = true` 로 바꾸고 빌드
-2. 게임에서 군주 고용창 열기
-3. 게임 폴더의 `employment_manager_ui_dump.txt` 를 레포에 올리기
+## 테스트 중: 고용창에서 바로 해고
+`NewCharacterEnteredRecruitmentPool` 이벤트로 풀 후보를 알아낼 수 있다. 남은 확인은 두 가지:
+1. 풀 후보를 스크립트로 지울 수 있는가 → `employment_manager_pool_test.lua`
+2. 고용창에서 선택된 후보를 알아낼 수 있는가 → UI 덤프 (`DUMP_UI = true`)
+
+### 테스트 방법
+1. `pack/` 전체로 빌드 (테스트 파일, `DUMP_UI = true` 상태 그대로)
+2. 캠페인 로드 → **턴 넘기기** (풀에 새 후보가 들어와야 추적됨. 로드 전부터 있던 후보는 추적 안 됨)
+3. 군주 고용창 열기 → 후보 이름 기억 (UI 덤프도 이때 기록됨)
+4. 화면 오른쪽 아래 **[풀 테스트]** 버튼 클릭 → 가장 최근 들어온 후보 1명 삭제 시도
+5. 고용창 다시 열어서 그 후보가 사라졌는지 확인
+6. 게임 폴더(`Total War WARHAMMER III/`)의 두 파일을 `local_data` QnA 큐로 전달 (`wh3-employment_manager-001`)
+   - `employment_manager_pool_test.txt`
+   - `employment_manager_ui_dump.txt`
+   - + 5번 결과 (사라졌는지) 한 줄
+
+배포 전: 테스트 파일 삭제, `DUMP_UI = false`
 
 ## 인게임 확인할 것
 - [ ] 버튼 표시/위치 (`ui/templates/square_medium_button`, 아이콘 없음)
@@ -44,8 +64,11 @@
 - [ ] 고용창으로 보내기: 영웅 고용 목록에 나타나는지, 레벨/스킬/장비 유지되는지
 - [ ] 해고: 1000 골드가 빠지는지, 골드 부족하면 버튼이 비활성인지
 - [ ] 고용 → 해고 후 다음 턴에 고용풀이 보충되는지
+- [ ] 풀 후보가 3~5턴마다 바뀌는지
 
 ## 변경 이력
+- 0.6: 고용풀 갱신 주기 10~15턴 → 3~5턴 (campaign_variables)
+- 0.5 (테스트): 고용풀 후보 추적·삭제 테스트, UI 덤프 기본 켜짐
 - 0.4: 영구 삭제 → 해고 (퇴직금 1000 골드). 추정 방식이던 고용풀 리셋 제거
 - 0.3: Employment Manager 로 이름 변경. 고용풀 리셋 (1000 골드) 추가
 - 0.2: 영웅 지원, 영웅 고용창 복귀 버튼 추가

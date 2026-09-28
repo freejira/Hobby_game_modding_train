@@ -26,10 +26,10 @@
 
 ## 원리
 - 해고: `cm:treasury_mod(faction, -1000)` → `cm:suppress_immortality(fm_cqi, true)` → `cm:kill_character(lookup, 군주면 true)`
+  - 골드 차감은 문서상 "양수여야 함"이라 음수 동작 확인 필요
 - 고용창으로 보내기: `cm:set_character_immortality(lookup, true)` → `cm:kill_character` 로 부상 상태 →
   family member 로 재생성된 캐릭터를 찾아 `cm:stop_character_convalescing(cqi)` 로 즉시 복귀
-  - 부작용: 한 번 보낸 영웅은 **불멸**이 된다 (이후 전투에서 죽어도 부상 후 복귀). 필요하면 영구 삭제로 정리.
-  - 골드 차감은 문서상 "양수여야 함"이라 음수 동작 확인 필요
+  - 부작용: 한 번 보낸 영웅은 **불멸**이 된다 (이후 전투에서 죽어도 부상 후 복귀). 필요하면 해고로 정리.
 - 클릭은 `UITriggerScriptEvent` 를 거쳐 처리 (멀티플레이 동기화)
 
 ## TODO: 고용창에서 바로 삭제
@@ -39,7 +39,7 @@
 
 ## 인게임 확인할 것
 - [ ] 버튼 표시/위치 (`ui/templates/square_medium_button`, 아이콘 없음)
-- [ ] 영구 삭제: 고레벨 군주, 불멸 전설 군주가 풀로 안 돌아오는지
+- [ ] 해고: 고레벨 군주, 불멸 전설 군주가 풀로 안 돌아오는지
 - [ ] 해고: 군대에 붙은 영웅 삭제 시 군대가 멀쩡한지
 - [ ] 고용창으로 보내기: 영웅 고용 목록에 나타나는지, 레벨/스킬/장비 유지되는지
 - [ ] 해고: 1000 골드가 빠지는지, 골드 부족하면 버튼이 비활성인지

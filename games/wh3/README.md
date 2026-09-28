@@ -27,7 +27,7 @@ pack/text/db/*.loc.tsv    # 번역된 loc TSV
 ### mods
 | 이름 | 설명 | 상태 |
 |---|---|---|
-| [lord_remover](mods/lord_remover) | 군주 영구 삭제 (레벨·불멸 무관) | 인게임 테스트 전 |
+| [lord_hero_manager](mods/lord_hero_manager) | 군주·영웅 영구 삭제, 영웅 고용창 복귀 | 인게임 테스트 전 |
 
 ### translations
 | 이름 | 원본 모드 (워크샵 ID) | 기준 버전 | 상태 |

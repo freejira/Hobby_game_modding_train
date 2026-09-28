@@ -1,7 +1,7 @@
 # wh3-employment_manager-001: 고용풀 테스트 빌드 실행
 
 상태: 답변 대기
-브랜치: `dev-employment_manager`
+빌드할 코드 브랜치: `dev-employment_manager` (질문·답변은 `local_data`)
 
 ## 배경
 고용창(군주 고용풀)에서 바로 해고하는 기능을 만들 수 있는지 확인하려고 한다.

@@ -43,7 +43,7 @@
 3. 군주 고용창 열기 → 후보 이름 기억 (UI 덤프도 이때 기록됨)
 4. 화면 오른쪽 아래 **[풀 테스트]** 버튼 클릭 → 가장 최근 들어온 후보 1명 삭제 시도
 5. 고용창 다시 열어서 그 후보가 사라졌는지 확인
-6. 게임 폴더(`Total War WARHAMMER III/`)의 두 파일을 `test_logs/` 에 올리기
+6. 게임 폴더(`Total War WARHAMMER III/`)의 두 파일을 `local_data` QnA 큐로 전달 (`wh3-employment_manager-001`)
    - `employment_manager_pool_test.txt`
    - `employment_manager_ui_dump.txt`
    - + 5번 결과 (사라졌는지) 한 줄

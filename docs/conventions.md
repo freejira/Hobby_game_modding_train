@@ -32,4 +32,4 @@
   (`dev/<이름>` 은 `dev` 브랜치와 이름이 겹쳐서 git에서 만들 수 없음)
 
 ## 클라우드 ↔ 로컬 질문
-[docs/questions/README.md](questions/README.md) 참고.
+[docs/qna/README.md](qna/README.md) 참고.

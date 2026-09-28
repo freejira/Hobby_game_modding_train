@@ -1,7 +1,6 @@
 # wh3-employment_manager-001: 고용풀 테스트 빌드 실행
 
-상태: 답변 대기
-빌드할 코드 브랜치: `dev-employment_manager` (질문·답변은 `local_data`)
+빌드할 코드 브랜치: `dev-employment_manager`
 
 ## 배경
 고용창(군주 고용풀)에서 바로 해고하는 기능을 만들 수 있는지 확인하려고 한다.
@@ -16,13 +15,16 @@
 4. 군주 고용창 열기 → 후보 이름 적어두기
 5. 화면 오른쪽 아래 빈 네모 버튼 **[풀 테스트]** 클릭
 6. 고용창 다시 열기 → 삭제 시도된 후보가 사라졌는지 확인
-7. 게임 설치 폴더(`...\Total War WARHAMMER III\`)에 생긴 파일 2개를 답변 폴더에 복사
+7. 게임 설치 폴더(`...\Total War WARHAMMER III\`)에 생긴 파일 2개를 이 질문 폴더에 복사
    - `employment_manager_pool_test.txt`
    - `employment_manager_ui_dump.txt`
 
 ## 답변에 적어줄 것
 - [ ] 5번 버튼이 보였나? (안 보였으면 3~6번 대신 스크립트 로그/에러 상황)
 - [ ] 6번: 후보가 사라졌나? (사라짐 / 그대로 / 다른 변화)
-- [ ] 로그 파일 2개 → `docs/answers/wh3-employment_manager-001/`
+- [ ] 로그 파일 2개 → 이 폴더 (`answer.md` 옆)
 - [ ] 게임 튕김, 스크립트 에러 팝업 있었으면 내용
 - [ ] (가능하면) 해고/고용창으로 보내기 버튼도 눌러보고 결과
+
+## 답변 끝나면
+`answer.md` 작성 → `tools/qna.sh answer wh3-employment_manager-001` → `local_data` 에 push → PR "QnA 알림" 에 코멘트 `answered: wh3-employment_manager-001`

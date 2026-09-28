@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ModMetaData>
+  <name>__NAME__</name>
+  <author>freejira</author>
+  <packageId>freejira.__NAME__</packageId>
+  <supportedVersions>
+    <li>1.6</li>
+  </supportedVersions>
+  <modDependencies>
+    <li>
+      <packageId>원본.packageId</packageId>
+      <displayName>원본 모드 이름</displayName>
+    </li>
+  </modDependencies>
+  <loadAfter>
+    <li>원본.packageId</li>
+  </loadAfter>
+  <description>원본 모드 이름 한글화</description>
+</ModMetaData>

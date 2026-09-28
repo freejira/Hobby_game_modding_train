@@ -1,0 +1,8 @@
+* text=auto
+*.xml text eol=crlf
+*.tsv text eol=lf
+*.lua text eol=lf
+*.sh  text eol=lf
+*.png binary
+*.dds binary
+*.pack binary

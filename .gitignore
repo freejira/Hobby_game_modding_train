@@ -1,0 +1,13 @@
+# 빌드 결과물
+*.pack
+Assemblies/*.dll
+Assemblies/*.pdb
+bin/
+obj/
+.vs/
+*.user
+# OS / 에디터
+.DS_Store
+Thumbs.db
+desktop.ini
+.vscode/
